@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<script src="https://npmcdn.com/@reactivex/rxjs@5.0.0-beta.4/dist/global/Rx.umd.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-with-addons.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.1/react-dom.js"></script>
+		<script src="https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+		
+		
+		
+		<link href="https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" rel="stylesheet">
+
+		
+        <title>Hubbler Responsive Tables</title>
+    </head>
+    <body>
+		<div id="app"></div>
+		<script type="text/babel">
+			$.getJSON('https://randomuser.me/api/?results=50&inc=email,gender,dob', function(input) {
+				const BootstrapTable = window.BootstrapTable
+				
+				//data is the JSON string
+				class App extends React.Component {
+					constructor() {
+						super();
+						this.state = {
+						  data: input.results,
+						  isLoading: false
+						};
+
+					}				  
+
+					render() {
+						const loadingClass = this.state.isLoading? 'loading' : '';
+
+						return (
+						  <div className={`tile ${loadingClass}`}>
+							<div className="tableContainer">
+							   <Tile data={this.state.data} /> 
+							</div>
+						  </div>
+						);
+					}
+				}
+
+
+				class Tile extends React.Component {
+					render() {
+						return (
+						  <BootstrapTable data={this.props.data} pagination>
+							<TableHeaderColumn dataField="email" isKey>Email ID</TableHeaderColumn>
+							<TableHeaderColumn dataField="gender" filter={ { type: 'TextFilter', delay: 1000, condition: 'eq' }}>Gender</TableHeaderColumn>
+							<TableHeaderColumn dataField="dob" dataSort={true}>DOB (Sortable)</TableHeaderColumn>
+						  </BootstrapTable>
+						);
+					}
+				}
+
+				ReactDOM.render(<App />, document.querySelector('#app'))
+			});
+		</script>
+    </body>
+</html>
